@@ -1,21 +1,14 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
-//import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
+/// This is the main application widget.
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.black,
-
         appBar: AppBar(
           backgroundColor: Colors.black,
           leading: Container(
@@ -45,104 +38,17 @@ class MyApp extends StatelessWidget {
             ),
           ],
         ),
-        // ignore: avoid_unnecessary_containers
-        body: PageView(
-          controller: pageController,
-          children: [
-            SizedBox(
-              child: Container(
-                alignment: Alignment(0.0, -0.5),
-                color: Colors.black,
-                child: Image.asset(
-                  "assets/images/page1.png",
-                  scale: 3,
-                ),
-              ),
-            ),
-            SizedBox(
-              child: Container(
-                alignment: Alignment(0.0, -0.7),
-                color: Colors.black,
-                child: Image.asset(
-                  "assets/images/page2.png",
-                  scale: 3,
-                ),
-              ),
-            ),
-            SizedBox(
-              child: Container(
-                alignment: Alignment(0.0, -0.7),
-                color: Colors.black,
-                child: Image.asset(
-                  "assets/images/page3.png",
-                  scale: 3,
-                ),
-              ),
-            ),
-            SizedBox(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Text(
-                      '시청하려면 어떻게',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      '하나요?',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 20,
-                  ),
-                  Container(
-                    child: Text(
-                      '넷플릭스에 가입하면 앱으로',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    //color: Colors.amber,
-                    child: Text(
-                      '시청 가능합니다.',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-
+        body: Container(
+            margin: EdgeInsets.all(10),
+            //color: Colors.green,
+            child: const PageViewWidget()),
         bottomNavigationBar: Container(
+          alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
               color: Color.fromRGBO(229, 9, 20, 10),
               borderRadius: BorderRadius.all(Radius.circular(2))),
           margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 50.0),
-          width: 10,
+          width: 1000,
           height: 45,
           child: TextButton(
             style: TextButton.styleFrom(foregroundColor: Colors.white),
@@ -155,6 +61,75 @@ class MyApp extends StatelessWidget {
   }
 }
 
-final PageController pageController = PageController(
-  initialPage: 0,
-);
+/// This is the stateless widget that the main application instantiates.
+class PageViewWidget extends StatefulWidget {
+  const PageViewWidget({Key? key}) : super(key: key);
+
+  @override
+  _PageViewWidgetState createState() => _PageViewWidgetState();
+}
+
+class _PageViewWidgetState extends State<PageViewWidget> {
+  int currentPage = 0;
+  List<String> pageName = [
+    "First Page",
+    "Second Page",
+    "Third Page",
+    "fourth Page",
+  ];
+  final List<String> images = <String>[
+    "page1.png",
+    "page2.png",
+    "page3.png",
+    "page4.png"
+  ];
+
+  final PageController controller = PageController(initialPage: 0);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: controller,
+      onPageChanged: (value) {
+        setState(() {
+          currentPage = value;
+        });
+      },
+      itemCount: pageName.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 600,
+              //color: Colors.pink,
+              child: Image.asset(
+                "assets/images/${images[index]}",
+                scale: 1,
+              ),
+            ),
+            Container(
+              width: 80,
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                  pageName.length, // 도트개수
+                  (index) => AnimatedContainer(
+                    curve: Curves.easeIn,
+                    duration: Duration(milliseconds: 10),
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                        color: index == currentPage ? Colors.red : Colors.grey,
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
