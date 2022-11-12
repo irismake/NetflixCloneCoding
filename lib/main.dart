@@ -77,11 +77,10 @@ class _PageViewWidgetState extends State<PageViewWidget> {
     "page1.png",
     "page2.png",
     "page3.png",
-    "page4.png"
+    "page4.png",
   ];
 
-  final PageController controller =
-      PageController(initialPage: 0, viewportFraction: 0.1);
+  final PageController controller = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +100,78 @@ class _PageViewWidgetState extends State<PageViewWidget> {
                 },
                 itemCount: pageName.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    child: Image.asset(
-                      "assets/images/${images[index]}",
-                      scale: 3,
-                    ),
+                  if (index == 3) {}
+                  return Stack(
+                    children: [
+                      Center(
+                        child: Image.asset(
+                          "assets/images/${images[index]}",
+                          //scale: 2,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Positioned(
+                        top: 280,
+                        left: 90,
+                        child: Container(
+                          child: Text(
+                            '시청하려면 어떻게',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 320,
+                        left: 150,
+                        child: Container(
+                          child: Text(
+                            '하나요?',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 390,
+                        left: 90,
+                        child: Container(
+                          child: Text(
+                            '넷플릭스에 가입하면 앱으로',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 410,
+                        left: 135,
+                        child: Container(
+                          //color: Colors.amber,
+                          child: Text(
+                            '시청 가능합니다.',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
@@ -127,9 +193,7 @@ class _PageViewWidgetState extends State<PageViewWidget> {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                        color: index == _PageViewWidgetState.currentPage
-                            ? Colors.red
-                            : Colors.grey,
+                        color: index == currentPage ? Colors.red : Colors.grey,
                         borderRadius: BorderRadius.circular(20)),
                   ),
                 ),
@@ -141,3 +205,60 @@ class _PageViewWidgetState extends State<PageViewWidget> {
     );
   }
 }
+
+/*
+child:Stack(
+children: [Positioned(
+  top: 200,
+  child:
+                  Container(
+                    child: Text(
+                      '시청하려면 어떻게',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Retrosans',
+                      ),
+                    ),
+                  ),
+),
+                  Container(
+                    child: Text(
+                      '하나요?',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Retrosans',
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Text(
+                      '넷플릭스에 가입하면 앱으로',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Retrosans',
+                      ),
+                    ),
+                  ),
+                  Container(
+                    //color: Colors.amber,
+                    child: Text(
+                      '시청 가능합니다.',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Retrosans',
+                      ),
+                    ),
+                  ),
+],
+);*/
