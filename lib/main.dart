@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-/// This is the main application widget.
 class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +19,6 @@ class MyApp extends StatelessWidget {
               child: IconButton(
                 icon: Image.asset(
                   "assets/images/Logo.png",
-                  //width: double.infinity,
                 ),
                 onPressed: () {},
               ),
@@ -38,10 +38,7 @@ class MyApp extends StatelessWidget {
             ),
           ],
         ),
-        body: Container(
-            margin: EdgeInsets.all(10),
-            //color: Colors.green,
-            child: const PageViewWidget()),
+        body: const PageViewWidget(),
         bottomNavigationBar: Container(
           alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
@@ -61,7 +58,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// This is the stateless widget that the main application instantiates.
 class PageViewWidget extends StatefulWidget {
   const PageViewWidget({Key? key}) : super(key: key);
 
@@ -70,7 +66,7 @@ class PageViewWidget extends StatefulWidget {
 }
 
 class _PageViewWidgetState extends State<PageViewWidget> {
-  int currentPage = 0;
+  static int currentPage = 0;
   List<String> pageName = [
     "First Page",
     "Second Page",
@@ -84,33 +80,43 @@ class _PageViewWidgetState extends State<PageViewWidget> {
     "page4.png"
   ];
 
-  final PageController controller = PageController(initialPage: 0);
+  final PageController controller =
+      PageController(initialPage: 0, viewportFraction: 0.1);
 
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
-      controller: controller,
-      onPageChanged: (value) {
-        setState(() {
-          currentPage = value;
-        });
-      },
-      itemCount: pageName.length,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            Container(
+    return Column(
+      children: [
+        Center(
+          child: Expanded(
+            child: SizedBox(
+              height: 600.0,
               width: double.infinity,
-              height: 600,
-              //color: Colors.pink,
-              child: Image.asset(
-                "assets/images/${images[index]}",
-                scale: 1,
+              child: PageView.builder(
+                controller: controller,
+                onPageChanged: (value) {
+                  setState(() {
+                    currentPage = value;
+                  });
+                },
+                itemCount: pageName.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    child: Image.asset(
+                      "assets/images/${images[index]}",
+                      scale: 3,
+                    ),
+                  );
+                },
               ),
             ),
-            Container(
+          ),
+        ),
+        Center(
+          child: Expanded(
+            child: SizedBox(
               width: 80,
-              alignment: Alignment.bottomCenter,
+              height: 40,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(
@@ -121,15 +127,17 @@ class _PageViewWidgetState extends State<PageViewWidget> {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                        color: index == currentPage ? Colors.red : Colors.grey,
+                        color: index == _PageViewWidgetState.currentPage
+                            ? Colors.red
+                            : Colors.grey,
                         borderRadius: BorderRadius.circular(20)),
                   ),
                 ),
               ),
             ),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
   }
 }
