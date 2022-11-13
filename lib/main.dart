@@ -9,7 +9,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.black,
+        extendBody: true,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.black,
           leading: Container(
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
             ),
           ],
         ),
-        body: const PageViewWidget(),
+        body:
+            Container(height: 1000, width: 700, child: const PageViewWidget()),
         bottomNavigationBar: Container(
           alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
@@ -73,12 +75,7 @@ class _PageViewWidgetState extends State<PageViewWidget> {
     "Third Page",
     "fourth Page",
   ];
-  final List<String> images = <String>[
-    "page1.png",
-    "page2.png",
-    "page3.png",
-    "page4.png",
-  ];
+  final List<String> images = <String>["page1.png", "page2.png", "page3.png"];
 
   final PageController controller = PageController(initialPage: 0);
 
@@ -88,115 +85,137 @@ class _PageViewWidgetState extends State<PageViewWidget> {
       children: [
         Center(
           child: Expanded(
-            child: SizedBox(
-              height: 600.0,
+            child: Container(
+              color: Color.fromARGB(131, 0, 0, 0),
+              height: 741,
               width: double.infinity,
-              child: PageView.builder(
-                controller: controller,
-                onPageChanged: (value) {
-                  setState(() {
-                    currentPage = value;
-                  });
-                },
-                itemCount: pageName.length,
-                itemBuilder: (context, index) {
-                  if (index == 3) {}
-                  return Stack(
-                    children: [
-                      Center(
-                        child: Image.asset(
-                          "assets/images/${images[index]}",
-                          //scale: 2,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      Positioned(
-                        top: 280,
-                        left: 90,
-                        child: Container(
-                          child: Text(
-                            '시청하려면 어떻게',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: 'Retrosans',
+              child: Stack(
+                alignment: Alignment(0.0, 0.73),
+                children: [
+                  PageView.builder(
+                    controller: controller,
+                    onPageChanged: (value) {
+                      setState(() {
+                        currentPage = value;
+                      });
+                    },
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      if (index == 3)
+                        return Stack(
+                          children: [
+                            Container(
+                              height: 740,
+                              width: 500,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                    'assets/images/background.png',
+                                  ),
+                                  colorFilter: ColorFilter.mode(
+                                      Colors.black.withOpacity(0.5),
+                                      BlendMode.dstATop),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 320,
-                        left: 150,
-                        child: Container(
-                          child: Text(
-                            '하나요?',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: 'Retrosans',
+                            Positioned(
+                              top: 280,
+                              left: 90,
+                              child: Container(
+                                child: Text(
+                                  '시청하려면 어떻게',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontFamily: 'Retrosans',
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 390,
-                        left: 90,
-                        child: Container(
-                          child: Text(
-                            '넷플릭스에 가입하면 앱으로',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: 'Retrosans',
+                            Positioned(
+                              top: 320,
+                              left: 150,
+                              child: Container(
+                                child: Text(
+                                  '하나요?',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontFamily: 'Retrosans',
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 410,
-                        left: 135,
-                        child: Container(
-                          //color: Colors.amber,
-                          child: Text(
-                            '시청 가능합니다.',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: 'Retrosans',
+                            Positioned(
+                              top: 390,
+                              left: 90,
+                              child: Container(
+                                child: Text(
+                                  '넷플릭스에 가입하면 앱으로',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontFamily: 'Retrosans',
+                                  ),
+                                ),
+                              ),
                             ),
+                            Positioned(
+                              top: 415,
+                              left: 135,
+                              child: Container(
+                                child: Text(
+                                  '시청 가능합니다.',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontFamily: 'Retrosans',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      else
+                        return Container(
+                          color: Colors.black,
+                          height: 600,
+                          width: 350,
+                          alignment: Alignment(0.0, -0.7),
+                          child: Image.asset(
+                            "assets/images/${images[index]}",
+                            scale: 3,
                           ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-        Center(
-          child: Expanded(
-            child: SizedBox(
-              width: 80,
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(
-                  pageName.length, // 도트개수
-                  (index) => AnimatedContainer(
-                    curve: Curves.easeIn,
-                    duration: Duration(milliseconds: 10),
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                        color: index == currentPage ? Colors.red : Colors.grey,
-                        borderRadius: BorderRadius.circular(20)),
+                        );
+                    },
                   ),
-                ),
+                  Expanded(
+                    child: Container(
+                      width: 80,
+                      height: 40,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(
+                          pageName.length, // 도트개수
+                          (index) => AnimatedContainer(
+                            curve: Curves.easeIn,
+                            duration: Duration(milliseconds: 10),
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                                color: index == currentPage
+                                    ? Colors.red
+                                    : Colors.grey,
+                                borderRadius: BorderRadius.circular(20)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -205,60 +224,3 @@ class _PageViewWidgetState extends State<PageViewWidget> {
     );
   }
 }
-
-/*
-child:Stack(
-children: [Positioned(
-  top: 200,
-  child:
-                  Container(
-                    child: Text(
-                      '시청하려면 어떻게',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-),
-                  Container(
-                    child: Text(
-                      '하나요?',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 20,
-                  ),
-                  Container(
-                    child: Text(
-                      '넷플릭스에 가입하면 앱으로',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    //color: Colors.amber,
-                    child: Text(
-                      '시청 가능합니다.',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'Retrosans',
-                      ),
-                    ),
-                  ),
-],
-);*/
