@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          elevation: 0.0,
           leading: Container(
             alignment: Alignment(0.3, 0.0),
             child: (Transform.scale(
@@ -39,9 +40,10 @@ class MyApp extends StatelessWidget {
             ),
           ],
         ),
+        extendBodyBehindAppBar: true,
         body: Container(
           height: 1000,
-          width: 1000,
+          width: 1200,
           child: const PageViewWidget(),
         ),
         bottomNavigationBar: Container(
@@ -71,26 +73,34 @@ class PageViewWidget extends StatefulWidget {
 }
 
 class _PageViewWidgetState extends State<PageViewWidget> {
-  late double pageOffset;
-
-  int currentPage = 0;
+  late double pageOffset = 0.0;
+  double currentPage = 0.0;
   List<String> pageName = [
     "First Page",
     "Second Page",
     "Third Page",
     "fourth Page",
   ];
-  final List<String> images = <String>["page1.png", "page2.png", "page3.png"];
-
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+
     _scrollController.addListener(() {
       setState(() {
+        currentPage = pageOffset / 400;
+        if (currentPage < 0.5) {
+          currentPage = 0;
+        } else if (currentPage < 1.5) {
+          currentPage = 1;
+        } else if (currentPage < 2.5) {
+          currentPage = 2;
+        } else {
+          currentPage = 3;
+        }
+
         pageOffset = _scrollController.offset;
-        print(pageOffset);
       });
     });
   }
@@ -98,6 +108,7 @@ class _PageViewWidgetState extends State<PageViewWidget> {
   @override
   void dispose() {
     _scrollController.dispose();
+
     super.dispose();
   }
 
@@ -106,126 +117,131 @@ class _PageViewWidgetState extends State<PageViewWidget> {
     return Stack(
       children: [
         Positioned(
-          bottom: 0,
+          top: 10,
           left: 0,
           child: Container(
             width: 400,
-            height: 900,
+            height: 1000,
             color: Colors.black,
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 900,
+            child: ListView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              physics: const PageScrollPhysics(),
+              children: <Widget>[
+                Container(
+                  height: 990,
                   width: 400,
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    physics: const PageScrollPhysics(),
-                    itemCount: pageName.length,
-                    itemBuilder: (context, index) {
-                      currentPage = index;
-                      if (index != 3)
-                        return Container(
-                          color: Colors.black,
-                          height: 900,
-                          width: 400,
-                          alignment: Alignment(0.0, 0.0),
-                          child: Image.asset(
-                            "assets/images/${images[index]}",
-                            scale: 3,
+                  alignment: Alignment(0.0, -0.5),
+                  child: Image.asset(
+                    "assets/images/page1.png",
+                    scale: 3,
+                  ),
+                ),
+                Container(
+                  height: 990,
+                  width: 400,
+                  alignment: Alignment(0.0, -0.5),
+                  child: Image.asset(
+                    "assets/images/page2.png",
+                    scale: 3,
+                  ),
+                ),
+                Container(
+                  height: 990,
+                  width: 400,
+                  alignment: Alignment(0.0, -0.5),
+                  child: Image.asset(
+                    "assets/images/page3.png",
+                    scale: 3,
+                  ),
+                ),
+                Container(
+                  height: 1000,
+                  width: 400,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 0,
+                        right: (3 - pageOffset / 400) * 150,
+                        child: Transform.scale(
+                          scale: 1,
+                          child: Container(
+                            height: 900,
+                            width: 400,
+                            child: Image.asset(
+                              'assets/images/background.png',
+                              height: 900,
+                              width: 400,
+                              fit: BoxFit.fill,
+                            ),
                           ),
-                        );
-                      else
-                        return Container(
-                          height: 900,
-                          width: 400,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                top: 0,
-                                right: (index - pageOffset / 400) * 150,
-                                child: Transform.scale(
-                                  scale: 1,
-                                  child: Container(
-                                    height: 900,
-                                    width: 400,
-                                    child: Image.asset(
-                                      'assets/images/background.png',
-                                      height: 900,
-                                      width: 400,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Color.fromARGB(153, 0, 0, 0)),
-                                ),
-                              ),
-                              Positioned(
-                                top: 450,
-                                left: 90,
-                                child: Container(
-                                  child: Text(
-                                    '시청하려면 어떻게',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: 'Retrosans',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 490,
-                                left: 150,
-                                child: Container(
-                                  child: Text(
-                                    '하나요?',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: 'Retrosans',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 540,
-                                left: 90,
-                                child: Container(
-                                  child: Text(
-                                    '넷플릭스에 가입하면 앱으로',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      fontFamily: 'Retrosans',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 565,
-                                left: 135,
-                                child: Container(
-                                  child: Text(
-                                    '시청 가능합니다.',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      fontFamily: 'Retrosans',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                        ),
+                      ),
+                      Positioned(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(153, 0, 0, 0)),
+                        ),
+                      ),
+                      Positioned(
+                        top: 380,
+                        left: 90,
+                        child: Container(
+                          child: Text(
+                            '시청하려면 어떻게',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
                           ),
-                        );
-                    },
+                        ),
+                      ),
+                      Positioned(
+                        top: 420,
+                        left: 150,
+                        child: Container(
+                          child: Text(
+                            '하나요?',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 480,
+                        left: 90,
+                        child: Container(
+                          child: Text(
+                            '넷플릭스에 가입하면 앱으로',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 505,
+                        left: 135,
+                        child: Container(
+                          child: Text(
+                            '시청 가능합니다.',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontFamily: 'Retrosans',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
