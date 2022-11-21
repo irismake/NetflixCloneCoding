@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 
-class LoginRoute extends StatelessWidget {
-  const LoginRoute({super.key});
+class LoginRoute extends StatefulWidget {
+  const LoginRoute({Key? key}) : super(key: key);
+
+  @override
+  LoginRoutePage createState() => LoginRoutePage();
+}
+
+class LoginRoutePage extends State<LoginRoute> {
+  //const LoginRoute({super.key});
+  final myController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start listening to changes.
+    myController.addListener(_printLatestValue);
+  }
+
+  void _printLatestValue() {
+    print('Second text field: ${myController.text}');
+  }
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Color.fromARGB(246, 132, 129, 129);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -25,7 +46,6 @@ class LoginRoute extends StatelessWidget {
         ),
         leadingWidth: 100,
         title: Container(
-          //color: Colors.yellow,
           width: 100,
           height: 45,
           alignment: Alignment(0.1, 0.0),
@@ -50,7 +70,6 @@ class LoginRoute extends StatelessWidget {
         child: Container(
             height: 350,
             width: 350,
-            //color: Colors.green,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -58,15 +77,16 @@ class LoginRoute extends StatelessWidget {
                   width: 300,
                   height: 50,
                   decoration: BoxDecoration(
-                      color: Color.fromARGB(246, 57, 55, 55),
+                      color: Color.fromARGB(246, 132, 129, 129),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                  margin: EdgeInsets.fromLTRB(0.0, 0.1, 0.5, 0.1),
-                  child: TextButton(
-                    //style: TextButton.styleFrom(foregroundColor: Colors.white),
-                    onPressed: null,
-                    child: Text(
-                      "이메일 주소 또는 전화번호",
-                      style: TextStyle(color: Colors.white),
+                  child: Center(
+                    child: Padding(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: '이메일 주소 또는 전화번호',
+                        ),
+                      ),
+                      padding: EdgeInsets.all(10.0),
                     ),
                   ),
                 ),
@@ -74,16 +94,18 @@ class LoginRoute extends StatelessWidget {
                   width: 300,
                   height: 50,
                   decoration: BoxDecoration(
-                      color: Color.fromARGB(246, 57, 55, 55),
+                      color: Color.fromARGB(246, 132, 129, 129),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
 
-                  child: TextButton(
-                    //style: TextButton.styleFrom(foregroundColor: Colors.white),
-                    onPressed: null,
-                    child: Text(
-                      "비밀번호",
-                      style: TextStyle(color: Colors.white),
+                  child: Center(
+                    child: Padding(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: '비밀번호',
+                        ),
+                      ),
+                      padding: EdgeInsets.all(10.0),
                     ),
                   ),
                 ),
@@ -96,10 +118,7 @@ class LoginRoute extends StatelessWidget {
                         color: Colors.black,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                  //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-
                   child: TextButton(
-                    //style: TextButton.styleFrom(foregroundColor: Colors.white),
                     onPressed: null,
                     child: Text(
                       "로그인",
@@ -109,7 +128,6 @@ class LoginRoute extends StatelessWidget {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  //color: Colors.pink,
                   width: 300,
                   height: 30,
                   child: Text(
@@ -119,12 +137,12 @@ class LoginRoute extends StatelessWidget {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  //color: Colors.pink,
                   width: 300,
                   height: 40,
                   child: Text(
                     '로그인 시 Google reCAPTCHA를 이용해 사용자가\n로봇이 아님을 확인합니다. 자세히 알아보기',
                     style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
