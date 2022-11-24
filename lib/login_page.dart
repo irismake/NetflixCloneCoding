@@ -8,9 +8,11 @@ class LoginRoute extends StatefulWidget {
 }
 
 class LoginRoutePage extends State<LoginRoute> {
+  final TextEditingController _textController = TextEditingController();
   //const LoginRoute({super.key});
   final myController = TextEditingController();
-
+  String obscureText = "숨기기";
+  bool obscureState = true;
   @override
   void initState() {
     super.initState();
@@ -81,12 +83,24 @@ class LoginRoutePage extends State<LoginRoute> {
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: Center(
                     child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 40, 5),
                       child: TextField(
+                        controller: _textController,
+                        onSubmitted: _handleSubmitted,
+                        cursorColor: Colors.white,
                         decoration: InputDecoration(
-                          labelText: '이메일 주소 또는 전화번호',
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintText: '이메일 주소 또는 전화번호',
                         ),
+                        onChanged: (text) {
+                          // 현재 텍스트필드의 텍스트를 출력
+                          print("First text field: $text");
+                        },
                       ),
-                      padding: EdgeInsets.all(10.0),
                     ),
                   ),
                 ),
@@ -98,15 +112,51 @@ class LoginRoutePage extends State<LoginRoute> {
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
 
-                  child: Center(
-                    child: Padding(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: '비밀번호',
+                  child: Row(
+                    children: [
+                      Container(
+                        //color: Colors.blue,
+                        height: 40,
+                        width: 240,
+                        padding: EdgeInsets.fromLTRB(10, 15, 40, 0),
+                        child: TextFormField(
+                          //controller: _textController,
+                          //onSubmitted: _handleSubmitted,
+                          cursorColor: Colors.white,
+                          obscureText: obscureState,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintText: '비밀번호',
+                          ),
+                          onChanged: (text) {
+                            print("First text field: $text");
+                          },
                         ),
                       ),
-                      padding: EdgeInsets.all(10.0),
-                    ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 30,
+                        width: 60,
+                        //margin: EdgeInsets.all(10),
+                        child: TextButton(
+                          child: Text(
+                            obscureText,
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 204, 201, 201)),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              obscureText = obscureState == true ? '숨기기' : '표시';
+                              obscureState = !obscureState;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
@@ -119,7 +169,7 @@ class LoginRoutePage extends State<LoginRoute> {
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: TextButton(
-                    onPressed: null,
+                    onPressed: (() => _handleSubmitted(_textController.text)),
                     child: Text(
                       "로그인",
                       style: TextStyle(color: Colors.white),
@@ -149,5 +199,9 @@ class LoginRoutePage extends State<LoginRoute> {
             )),
       ),
     );
+  }
+
+  void _handleSubmitted(String text) {
+    //_textController.clear();
   }
 }
