@@ -15,8 +15,10 @@ class LoginRoutePage extends State<LoginRoute> {
 
   String obscureText = "숨기기";
   bool obscureState = true;
-  bool buttonState = false;
-
+  bool fontChange = false;
+  double fontChangeSize = 17;
+  double top = 0.0;
+  double left = -0.5;
   @override
   void initState() {
     super.initState();
@@ -69,161 +71,181 @@ class LoginRoutePage extends State<LoginRoute> {
           ),
         ],
       ),
-      body: GestureDetector(
-        onPanDown: (_) {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          controller: _scrollController,
+      body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        physics: ClampingScrollPhysics(),
+        controller: _scrollController,
+        child: Container(
+          height: 741,
+          width: 400,
+          color: Color.fromARGB(255, 34, 34, 34),
+          alignment: Alignment(0.0, 0.1),
           child: Container(
-            height: 741,
-            width: 400,
-            color: Color.fromARGB(255, 34, 34, 34),
-            alignment: Alignment(0.0, 0.1),
-            child: Container(
-                height: 350,
-                width: 350,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      width: 300,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          /*buttonColor == true
+              height: 350,
+              width: 350,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: 300,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: primaryColor,
+                        /*buttonColor == true
                               ? Color.fromARGB(246, 225, 14, 14)
                               : Color.fromARGB(255, 93, 92, 92),*/
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      padding: EdgeInsets.fromLTRB(10, 10, 40, 5),
-                      child: TextField(
-                        controller: _idController,
-                        scrollPadding: EdgeInsets.only(bottom: 180),
-                        keyboardType: TextInputType.emailAddress,
-
-                        onTap: () {
-                          buttonState = true;
-                        },
-                        //onSubmitted: _handleSubmitted(),
-                        cursorColor: Colors.white,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          //focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          hintText: '이메일 주소 또는 전화번호',
-                          hintStyle: TextStyle(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    padding: EdgeInsets.fromLTRB(10, 10, 40, 5),
+                    child: TextField(
+                      controller: _idController,
+                      scrollPadding: EdgeInsets.only(bottom: 180),
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: false,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      onTap: () {
+                        textChange();
+                      },
+                      //onSubmitted: _handleSubmitted(),
+                      cursorColor: Colors.white,
+                      decoration: InputDecoration(
+                        label: Container(
+                          height: 20,
+                          color: Colors.amber,
+                          alignment: Alignment(top, left),
+                          child: Text("이메일 주소 또는 전화번호",
+                              style:
+                                  TextStyle(fontSize: 17, color: Colors.white),
+                              textAlign: TextAlign.left),
                         ),
-                        onChanged: (text) {
-                          print("First text field: $text");
-                        },
+                        //labelText: '',
+                        //labelStyle: TextStyle(
+                        //fontSize: 20,
+                        //color: Colors.white,
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
                       ),
+                      //
+
+                      //hintText: '이메일 주소 또는 전화번호',
+                      //hintStyle: TextStyle(color: Colors.white),
+
+                      onChanged: (text) {
+                        print("First text field: $text");
+                      },
                     ),
-                    Container(
-                      width: 300,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 40,
-                            width: 240,
-                            padding: EdgeInsets.fromLTRB(10, 15, 40, 0),
-                            child: TextField(
-                              controller: _passwordController,
-                              scrollPadding: EdgeInsets.only(bottom: 180),
+                  ),
+                  Container(
+                    width: 300,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 40,
+                          width: 240,
+                          padding: EdgeInsets.fromLTRB(10, 15, 40, 0),
+                          child: TextField(
+                            controller: _passwordController,
+                            scrollPadding: EdgeInsets.only(bottom: 180),
 
-                              keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: obscureState,
+                            //enableSuggestions: false,
+                            //autocorrect: false,
+                            onTap: () {
+                              setState(() {
+                                //obscureState = !obscureState;
+                                primaryColor = Colors.blueGrey;
+                              });
+                              //primaryColor = clickColor;
+                            },
+                            //onSubmitted: _handleSubmitted(),
+                            cursorColor: Colors.white,
 
-                              onTap: () {
-                                primaryColor = clickColor;
-                              },
-                              //onSubmitted: _handleSubmitted(),
-                              cursorColor: Colors.white,
-                              obscureText: obscureState,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintText: '비밀번호',
-                                hintStyle: TextStyle(color: Colors.white),
-                              ),
-                              onChanged: (text) {
-                                print("First text field: $text");
-                              },
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hintText: '비밀번호',
+                              hintStyle: TextStyle(color: Colors.white),
                             ),
+                            onChanged: (text) {
+                              print("First text field: $text");
+                            },
                           ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 30,
-                            width: 60,
-                            child: TextButton(
-                              child: Text(
-                                obscureText,
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 204, 201, 201)),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  obscureText =
-                                      obscureState == true ? '숨기기' : '표시';
-                                  obscureState = !obscureState;
-                                });
-                              },
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 30,
+                          width: 60,
+                          child: TextButton(
+                            child: Text(
+                              obscureText,
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 204, 201, 201)),
                             ),
+                            onPressed: () {
+                              setState(() {
+                                obscureText =
+                                    obscureState == true ? '숨기기' : '표시';
+                                obscureState = !obscureState;
+                              });
+                            },
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 300,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: Colors.black,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: TextButton(
-                        onPressed: (() => _handleSubmitted()),
-                        // _idController.text, _passwordController.text)),
-                        child: Text(
-                          "로그인",
-                          style: TextStyle(color: Colors.white),
                         ),
-                      ),
+                      ],
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 300,
-                      height: 30,
-                      child: TextButton(
-                        onPressed: null,
-                        child: Text(
-                          '비밀번호 재설정',
-                          style: TextStyle(color: Colors.white),
+                  ),
+                  Container(
+                    width: 300,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.black,
                         ),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 300,
-                      height: 40,
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: TextButton(
+                      onPressed: (() => _handleSubmitted()),
+                      // _idController.text, _passwordController.text)),
                       child: Text(
-                        '로그인 시 Google reCAPTCHA를 이용해 사용자가\n로봇이 아님을 확인합니다. 자세히 알아보기',
+                        "로그인",
                         style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ],
-                )),
-          ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    width: 300,
+                    height: 30,
+                    child: TextButton(
+                      onPressed: null,
+                      child: Text(
+                        '비밀번호 재설정',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    width: 300,
+                    height: 40,
+                    child: Text(
+                      '로그인 시 Google reCAPTCHA를 이용해 사용자가\n로봇이 아님을 확인합니다. 자세히 알아보기',
+                      style: TextStyle(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              )),
         ),
       ),
     );
@@ -232,5 +254,9 @@ class LoginRoutePage extends State<LoginRoute> {
   void _handleSubmitted() {
     _idController.clear();
     _passwordController.clear();
+  }
+
+  void textChange() {
+    fontChangeSize = 5;
   }
 }
