@@ -15,10 +15,14 @@ class LoginRoutePage extends State<LoginRoute> {
 
   String obscureText = "숨기기";
   bool obscureState = true;
-  bool fontChange = false;
-  double fontChangeSize = 17;
-  double top = 0.0;
-  double left = -0.5;
+  bool IdState = false;
+  bool PwState = false;
+
+  double fontSizeId = 17;
+  double fontSizePw = 17;
+  double fontPositionId = 15;
+  double fontPositionPw = 15;
+
   @override
   void initState() {
     super.initState();
@@ -31,10 +35,34 @@ class LoginRoutePage extends State<LoginRoute> {
     super.dispose();
   }
 
+  FocusNode _focusNodeId = FocusNode();
+  FocusNode _focusNodePw = FocusNode();
+
   @override
   Widget build(BuildContext context) {
-    Color primaryColor = Color.fromARGB(246, 132, 129, 129);
-    Color clickColor = Color.fromARGB(255, 232, 23, 23);
+    Color primaryColor = Color.fromARGB(255, 84, 83, 83);
+
+    _focusNodeId.addListener(() {
+      setState(() {
+        fontSizeId = 10;
+        fontPositionId = 5;
+        primaryColor = Colors.red;
+        //fontSizeId = _focusNodeId.hasFocus ? 10 : 17;
+        //fontPositionId = _focusNodeId.hasFocus ? 5 : 15;
+        //primaryColor = _focusNodeId.hasFocus ? Colors.grey : Colors.red;
+      });
+    });
+
+    _focusNodePw.addListener(() {
+      setState(() {
+        fontSizePw = 10;
+        fontPositionPw = 5;
+        //primaryColor = Colors.red;
+        //fontSizePw = _focusNodePw.hasFocus ? 10 : 17;
+        //fontPositionPw = _focusNodePw.hasFocus ? 5 : 15;
+      });
+    });
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -78,7 +106,7 @@ class LoginRoutePage extends State<LoginRoute> {
         child: Container(
           height: 741,
           width: 400,
-          color: Color.fromARGB(255, 34, 34, 34),
+          color: Color.fromARGB(255, 28, 28, 28),
           alignment: Alignment(0.0, 0.1),
           child: Container(
               height: 350,
@@ -87,125 +115,148 @@ class LoginRoutePage extends State<LoginRoute> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    width: 300,
+                    width: 320,
                     height: 50,
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        /*buttonColor == true
-                              ? Color.fromARGB(246, 225, 14, 14)
-                              : Color.fromARGB(255, 93, 92, 92),*/
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    padding: EdgeInsets.fromLTRB(10, 10, 40, 5),
-                    child: TextField(
-                      controller: _idController,
-                      scrollPadding: EdgeInsets.only(bottom: 180),
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: false,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      onTap: () {
-                        textChange();
-                      },
-                      //onSubmitted: _handleSubmitted(),
-                      cursorColor: Colors.white,
-                      decoration: InputDecoration(
-                        label: Container(
-                          height: 20,
-                          color: Colors.amber,
-                          alignment: Alignment(top, left),
-                          child: Text("이메일 주소 또는 전화번호",
-                              style:
-                                  TextStyle(fontSize: 17, color: Colors.white),
-                              textAlign: TextAlign.left),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Container(
+                            width: 320,
+                            height: 50,
+                            padding: EdgeInsets.only(left: 8),
+                            child: TextFormField(
+                              /* validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  IdState = false;
+                                  print('ddd');
+                                } else {
+                                  IdState = true;
+                                }
+                              },*/
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(color: Colors.white),
+                              focusNode: _focusNodeId,
+                              controller: _idController,
+                              scrollPadding: EdgeInsets.only(bottom: 180),
+                              keyboardType: TextInputType.emailAddress,
+                              obscureText: false,
+                              enableSuggestions: false,
+                              autocorrect: false,
+                              onTap: () {},
+                              onChanged: (text) {
+                                print("First text field: $text");
+                              },
+                              cursorColor: Colors.white,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: primaryColor,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(color: primaryColor),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        //labelText: '',
-                        //labelStyle: TextStyle(
-                        //fontSize: 20,
-                        //color: Colors.white,
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                      ),
-                      //
-
-                      //hintText: '이메일 주소 또는 전화번호',
-                      //hintStyle: TextStyle(color: Colors.white),
-
-                      onChanged: (text) {
-                        print("First text field: $text");
-                      },
+                        Positioned(
+                            top: fontPositionId,
+                            left: 20,
+                            child: Text(
+                              '이메일 주소 또는 전화번호',
+                              style: TextStyle(
+                                fontSize: fontSizeId,
+                                color: Colors.white,
+                              ),
+                            )),
+                      ],
                     ),
                   ),
                   Container(
-                    width: 300,
+                    width: 320,
                     height: 50,
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: Row(
+                    child: Stack(
                       children: [
-                        Container(
-                          height: 40,
-                          width: 240,
-                          padding: EdgeInsets.fromLTRB(10, 15, 40, 0),
-                          child: TextField(
-                            controller: _passwordController,
-                            scrollPadding: EdgeInsets.only(bottom: 180),
-
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: obscureState,
-                            //enableSuggestions: false,
-                            //autocorrect: false,
-                            onTap: () {
-                              setState(() {
-                                //obscureState = !obscureState;
-                                primaryColor = Colors.blueGrey;
-                              });
-                              //primaryColor = clickColor;
-                            },
-                            //onSubmitted: _handleSubmitted(),
-                            cursorColor: Colors.white,
-
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              hintText: '비밀번호',
-                              hintStyle: TextStyle(color: Colors.white),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Container(
+                            height: 50,
+                            width: 320,
+                            //color: Colors.orange,
+                            padding: EdgeInsets.only(left: 8),
+                            child: TextFormField(
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(color: Colors.white),
+                              focusNode: _focusNodePw,
+                              controller: _passwordController,
+                              scrollPadding: EdgeInsets.only(bottom: 180),
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: obscureState,
+                              enableSuggestions: false,
+                              autocorrect: false,
+                              onTap: () {},
+                              onChanged: (text) {
+                                print("First text field: $text");
+                              },
+                              cursorColor: Colors.white,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: primaryColor,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(color: primaryColor),
+                                ),
+                              ),
                             ),
-                            onChanged: (text) {
-                              print("First text field: $text");
-                            },
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          height: 30,
-                          width: 60,
-                          child: TextButton(
-                            child: Text(
-                              obscureText,
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 204, 201, 201)),
+                        Positioned(
+                          top: fontPositionPw,
+                          left: 20,
+                          child: Text(
+                            '비밀번호',
+                            style: TextStyle(
+                              fontSize: fontSizePw,
+                              color: Colors.white,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                obscureText =
-                                    obscureState == true ? '숨기기' : '표시';
-                                obscureState = !obscureState;
-                              });
-                            },
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          left: 265,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 30,
+                            width: 60,
+                            child: TextButton(
+                              child: Text(
+                                obscureText,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 231, 227, 227)),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  obscureText =
+                                      obscureState == true ? '숨기기' : '표시';
+                                  obscureState = !obscureState;
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    width: 300,
+                    width: 320,
                     height: 50,
                     decoration: BoxDecoration(
                         border: Border.all(
@@ -254,9 +305,5 @@ class LoginRoutePage extends State<LoginRoute> {
   void _handleSubmitted() {
     _idController.clear();
     _passwordController.clear();
-  }
-
-  void textChange() {
-    fontChangeSize = 5;
   }
 }
