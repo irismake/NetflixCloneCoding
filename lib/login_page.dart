@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart';
 
 class LoginRoute extends StatefulWidget {
   const LoginRoute({Key? key}) : super(key: key);
@@ -15,9 +14,7 @@ class LoginRoutePage extends State<LoginRoute> {
 
   String obscureText = "숨기기";
   bool obscureState = true;
-  bool IdState = false;
-  bool PwState = false;
-
+  bool textState = false;
   double fontSizeId = 17;
   double fontSizePw = 17;
   double fontPositionId = 15;
@@ -37,16 +34,17 @@ class LoginRoutePage extends State<LoginRoute> {
 
   FocusNode _focusNodeId = FocusNode();
   FocusNode _focusNodePw = FocusNode();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     Color primaryColor = Color.fromARGB(255, 84, 83, 83);
-
+    Color loginButtonColor = Color.fromARGB(255, 76, 54, 244);
     _focusNodeId.addListener(() {
       setState(() {
         fontSizeId = 10;
         fontPositionId = 5;
         primaryColor = Colors.red;
+
         //fontSizeId = _focusNodeId.hasFocus ? 10 : 17;
         //fontPositionId = _focusNodeId.hasFocus ? 5 : 15;
         //primaryColor = _focusNodeId.hasFocus ? Colors.grey : Colors.red;
@@ -109,194 +107,209 @@ class LoginRoutePage extends State<LoginRoute> {
           color: Color.fromARGB(255, 28, 28, 28),
           alignment: Alignment(0.0, 0.1),
           child: Container(
-              height: 350,
-              width: 350,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 320,
-                    height: 50,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Container(
-                            width: 320,
-                            height: 50,
-                            padding: EdgeInsets.only(left: 8),
-                            child: TextFormField(
-                              /* validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  IdState = false;
-                                  print('ddd');
-                                } else {
-                                  IdState = true;
-                                }
-                              },*/
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(color: Colors.white),
-                              focusNode: _focusNodeId,
-                              controller: _idController,
-                              scrollPadding: EdgeInsets.only(bottom: 180),
-                              keyboardType: TextInputType.emailAddress,
-                              obscureText: false,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              onTap: () {},
-                              onChanged: (text) {
-                                print("First text field: $text");
-                              },
-                              cursorColor: Colors.white,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: primaryColor,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(color: primaryColor),
+            height: 350,
+            width: 350,
+            child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: 320,
+                      height: 50,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            child: Container(
+                              width: 320,
+                              height: 50,
+                              padding: EdgeInsets.only(left: 8),
+                              child: TextFormField(
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(color: Colors.white),
+                                focusNode: _focusNodeId,
+                                controller: _idController,
+                                scrollPadding: EdgeInsets.only(bottom: 180),
+                                keyboardType: TextInputType.emailAddress,
+                                obscureText: false,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                onTap: () {},
+                                onChanged: (text) {
+                                  print("First text field: $text");
+                                },
+                                cursorColor: Colors.white,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: primaryColor,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(color: primaryColor),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                            top: fontPositionId,
+                          Positioned(
+                              top: fontPositionId,
+                              left: 20,
+                              child: Text(
+                                '이메일 주소 또는 전화번호',
+                                style: TextStyle(
+                                  fontSize: fontSizeId,
+                                  color: Colors.white,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 320,
+                      height: 50,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            child: Container(
+                              height: 50,
+                              width: 320,
+                              //color: Colors.orange,
+                              padding: EdgeInsets.only(left: 8),
+                              child: TextFormField(
+                                validator: (String? val) {
+                                  if (val == null || val.isEmpty) {
+                                    return 'Please enter some text';
+                                  } else {
+                                    textState = true;
+                                  }
+                                  return null;
+                                },
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(color: Colors.white),
+                                focusNode: _focusNodePw,
+                                controller: _passwordController,
+                                scrollPadding: EdgeInsets.only(bottom: 180),
+                                keyboardType: TextInputType.visiblePassword,
+                                obscureText: obscureState,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                onTap: () {},
+                                onChanged: (text) {
+                                  print("First text field: $text");
+                                },
+                                cursorColor: Colors.white,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: primaryColor,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(color: primaryColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: fontPositionPw,
                             left: 20,
                             child: Text(
-                              '이메일 주소 또는 전화번호',
+                              '비밀번호',
                               style: TextStyle(
-                                fontSize: fontSizeId,
+                                fontSize: fontSizePw,
                                 color: Colors.white,
                               ),
-                            )),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 320,
-                    height: 50,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Container(
-                            height: 50,
-                            width: 320,
-                            //color: Colors.orange,
-                            padding: EdgeInsets.only(left: 8),
-                            child: TextFormField(
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(color: Colors.white),
-                              focusNode: _focusNodePw,
-                              controller: _passwordController,
-                              scrollPadding: EdgeInsets.only(bottom: 180),
-                              keyboardType: TextInputType.visiblePassword,
-                              obscureText: obscureState,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              onTap: () {},
-                              onChanged: (text) {
-                                print("First text field: $text");
-                              },
-                              cursorColor: Colors.white,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: primaryColor,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 265,
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 30,
+                              width: 60,
+                              child: TextButton(
+                                child: Text(
+                                  obscureText,
+                                  style: TextStyle(
+                                      color:
+                                          Color.fromARGB(255, 231, 227, 227)),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(color: primaryColor),
-                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscureText =
+                                        obscureState == true ? '숨기기' : '표시';
+                                    obscureState = !obscureState;
+                                  });
+                                },
                               ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                          top: fontPositionPw,
-                          left: 20,
-                          child: Text(
-                            '비밀번호',
-                            style: TextStyle(
-                              fontSize: fontSizePw,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 10,
-                          left: 265,
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 30,
-                            width: 60,
-                            child: TextButton(
-                              child: Text(
-                                obscureText,
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 231, 227, 227)),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  obscureText =
-                                      obscureState == true ? '숨기기' : '표시';
-                                  obscureState = !obscureState;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 320,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: Colors.black,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: TextButton(
-                      onPressed: (() => _handleSubmitted()),
-                      // _idController.text, _passwordController.text)),
-                      child: Text(
-                        "로그인",
-                        style: TextStyle(color: Colors.white),
+                        ],
                       ),
                     ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 300,
-                    height: 30,
-                    child: TextButton(
-                      onPressed: null,
-                      child: Text(
-                        '비밀번호 재설정',
-                        style: TextStyle(color: Colors.white),
+                    Container(
+                      width: 320,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: loginButtonColor,
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: TextButton(
+                        onPressed: () {
+                          if (textState == true) {
+                            loginButtonColor = Colors.red;
+                            print('k');
+                          } else if (_formKey.currentState!.validate()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Processing Data')),
+                            );
+                          }
+                        },
+
+                        // _idController.text, _passwordController.text)),
+                        child: Text(
+                          "로그인",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 300,
-                    height: 40,
-                    child: Text(
-                      '로그인 시 Google reCAPTCHA를 이용해 사용자가\n로봇이 아님을 확인합니다. 자세히 알아보기',
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center,
+                    Container(
+                      alignment: Alignment.center,
+                      width: 300,
+                      height: 30,
+                      child: TextButton(
+                        onPressed: null,
+                        child: Text(
+                          '비밀번호 재설정',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              )),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 300,
+                      height: 40,
+                      child: Text(
+                        '로그인 시 Google reCAPTCHA를 이용해 사용자가\n로봇이 아님을 확인합니다. 자세히 알아보기',
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                )),
+          ),
         ),
       ),
     );
@@ -306,4 +319,8 @@ class LoginRoutePage extends State<LoginRoute> {
     _idController.clear();
     _passwordController.clear();
   }
+}
+
+bool _isValidPhone(String val) {
+  return RegExp(r'^010\d{7,8}$').hasMatch(val);
 }
