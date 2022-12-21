@@ -14,7 +14,8 @@ class LoginRoutePage extends State<LoginRoute> {
 
   String obscureText = "숨기기";
   bool obscureState = true;
-  bool textState = false;
+  bool loginState = false;
+  bool pwState = false;
   double fontSizeId = 17;
   double fontSizePw = 17;
   double fontPositionId = 15;
@@ -32,34 +33,17 @@ class LoginRoutePage extends State<LoginRoute> {
     super.dispose();
   }
 
-  FocusNode _focusNodeId = FocusNode();
-  FocusNode _focusNodePw = FocusNode();
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     Color primaryColor = Color.fromARGB(255, 84, 83, 83);
-    Color loginButtonColor = Color.fromARGB(255, 76, 54, 244);
-    _focusNodeId.addListener(() {
-      setState(() {
-        fontSizeId = 10;
-        fontPositionId = 5;
-        primaryColor = Colors.red;
-
-        //fontSizeId = _focusNodeId.hasFocus ? 10 : 17;
-        //fontPositionId = _focusNodeId.hasFocus ? 5 : 15;
-        //primaryColor = _focusNodeId.hasFocus ? Colors.grey : Colors.red;
-      });
-    });
-
-    _focusNodePw.addListener(() {
-      setState(() {
-        fontSizePw = 10;
-        fontPositionPw = 5;
-        //primaryColor = Colors.red;
-        //fontSizePw = _focusNodePw.hasFocus ? 10 : 17;
-        //fontPositionPw = _focusNodePw.hasFocus ? 5 : 15;
-      });
-    });
+    Color getColor() {
+      if (loginState == true && pwState == true) {
+        return Colors.red;
+      } else {
+        return Colors.transparent;
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -127,9 +111,9 @@ class LoginRoutePage extends State<LoginRoute> {
                               height: 50,
                               padding: EdgeInsets.only(left: 8),
                               child: TextFormField(
+                                validator: (String? val) {},
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(color: Colors.white),
-                                focusNode: _focusNodeId,
                                 controller: _idController,
                                 scrollPadding: EdgeInsets.only(bottom: 180),
                                 keyboardType: TextInputType.emailAddress,
@@ -138,6 +122,17 @@ class LoginRoutePage extends State<LoginRoute> {
                                 autocorrect: false,
                                 onTap: () {},
                                 onChanged: (text) {
+                                  setState(() {
+                                    if (text == null || text.isEmpty) {
+                                      loginState = false;
+                                      fontSizeId = 17;
+                                      fontPositionId = 15;
+                                    } else {
+                                      loginState = true;
+                                      fontSizeId = 10;
+                                      fontPositionId = 5;
+                                    }
+                                  });
                                   print("First text field: $text");
                                 },
                                 cursorColor: Colors.white,
@@ -183,16 +178,15 @@ class LoginRoutePage extends State<LoginRoute> {
                               padding: EdgeInsets.only(left: 8),
                               child: TextFormField(
                                 validator: (String? val) {
-                                  if (val == null || val.isEmpty) {
+                                  /*if (val == null || val.isEmpty) {
+                                    pwState = false;
                                     return 'Please enter some text';
                                   } else {
-                                    textState = true;
-                                  }
-                                  return null;
+                                    pwState = true;
+                                  }*/
                                 },
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(color: Colors.white),
-                                focusNode: _focusNodePw,
                                 controller: _passwordController,
                                 scrollPadding: EdgeInsets.only(bottom: 180),
                                 keyboardType: TextInputType.visiblePassword,
@@ -201,6 +195,18 @@ class LoginRoutePage extends State<LoginRoute> {
                                 autocorrect: false,
                                 onTap: () {},
                                 onChanged: (text) {
+                                  setState(() {
+                                    if (text == null || text.isEmpty) {
+                                      pwState = false;
+                                      fontSizePw = 17;
+                                      fontPositionPw = 15;
+                                    } else {
+                                      pwState = true;
+                                      fontSizePw = 10;
+                                      fontPositionPw = 5;
+                                    }
+                                  });
+
                                   print("First text field: $text");
                                 },
                                 cursorColor: Colors.white,
@@ -260,7 +266,7 @@ class LoginRoutePage extends State<LoginRoute> {
                       width: 320,
                       height: 50,
                       decoration: BoxDecoration(
-                          color: loginButtonColor,
+                          color: getColor(),
                           border: Border.all(
                             width: 1,
                             color: Colors.black,
@@ -268,17 +274,14 @@ class LoginRoutePage extends State<LoginRoute> {
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: TextButton(
                         onPressed: () {
-                          if (textState == true) {
-                            loginButtonColor = Colors.red;
-                            print('k');
-                          } else if (_formKey.currentState!.validate()) {
+                          if (loginState == true &&
+                              pwState ==
+                                  true) {} /*else if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
                             );
-                          }
+                          }*/
                         },
-
-                        // _idController.text, _passwordController.text)),
                         child: Text(
                           "로그인",
                           style: TextStyle(color: Colors.white),
